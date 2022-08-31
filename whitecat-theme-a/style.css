@@ -1,0 +1,340 @@
+/*
+Theme Name: WhiteCat Theme A
+Theme URI:
+Description: WhiteCat Theme A
+Author: Syntaro
+Author URI:
+Template: lightning
+Version:0.1
+*/
+
+/* スクロール時のメニュー固定を解除
+@media (min-width: 992px){
+    .header_scrolled .site-header {
+         position: relative;
+    }
+}*/
+
+/* スムーススクロール */
+html {
+	scroll-behavior: smooth;
+}
+
+/*色などは以下のキーワードで指定する */
+.archive-header {
+	text-align: center;
+	color: black;
+	background-color: lightgreen;
+}
+
+/* デザインパーツ1 */
+.text-center {
+    text-align: center;
+}
+
+/* デザインパーツ2 */
+.text-q {
+	color: black;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+/* 背景のあるHTMLリンクの色1 */
+.has-background a {
+	font-weight: bold;
+}
+
+/* 背景のあるHTMLリンクの色2 */
+.has-background a:link {
+	color: yellow;
+}
+
+/* 背景のあるHTMLリンクの色3 */
+.has-background a:visited {
+	color: yellow;
+}
+
+/* 背景のあるHTMLリンクの色4 */
+.has-background a:hover {
+	color: #00FF99;
+}
+
+/* 背景のあるHTMLリンクの色5 */
+.has-background a:active {
+	color: #FFCC33;
+}
+
+/* 背景のないHTMLリンクの色1 */
+.white-background a {
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+/* 背景のないHTMLリンクの色2 */
+.white-background a:link {
+	color: #00FFAA;
+}
+
+/* 背景のないHTMLリンクの色3 */
+.white-background a:visited {
+	color: #8080AA;
+}
+
+/* 背景のないHTMLリンクの色4 */
+.white-background a:hover {
+	color: #FF0000;
+}
+
+/* 背景のないHTMLリンクの色5 */
+.white-background a:active {
+	color: #aaaa00;
+}
+
+/* コピーライトから、lightningの部分のみを消す */
+.site-footer-copyright p:nth-child(2) {
+    display: none; 
+}
+
+/* ヘッダーの上半分 */
+.site-header {
+	font-size: 0;
+	background-color: lightgreen !important;
+	display: flex;
+	width: 100%;
+	opacity: 100%;
+}
+
+/* ヘッダーの文字 */
+.site-header-logo span {
+	color: chocolate;
+}
+
+/*　ヘッダーロゴをはみ出させる1 */
+.site-header-logo img {
+	width: 130px;
+	height: 130px;
+	max-height: 130px;
+	max-width: 130px;
+	overflow-y: visible;
+}
+
+/* 各ページのタイトル文字 */
+.page-header {
+    text-align: left;
+	font-size: 0px;
+	height: 55px !important;
+	min-height: 1px !important;
+	max-height: 55px !important;
+}
+
+.page-header .container {
+}
+
+.page-header h1 {
+	text-decoration: none;
+	font-size: 20px;
+}
+
+.site-body {
+	padding: 10px;
+	margin: 0;
+}
+
+/*　ヘッダーロゴをはみ出させる2 関連して階層ナビ？を消す */
+.breadcrumb {
+	display: none;
+}
+
+.home .main-section > .vk_post,
+.home .main-section > .vk_posts > .media.vk_post-col-sm-12:first-child,
+.home .vk_post.media {
+	border: none;
+}
+
+.home .main-section > .vk_posts .vk_post-btn-display.media .vk_post_body,
+.home .vk_post_imgOuter_singleTermLabel {
+	display: none;
+}
+
+.home .vk_posts .vk_post-col-lg-12 {
+	width: 33.33%;
+}
+
+.home .vk_post .media-img {
+	width: 100%;
+	border: none;
+}
+
+.home .main-section > .vk_posts > .media.vk_post-col-lg-12 .media-img {
+	margin-right: 0;
+}
+
+.home .vk_post.media {
+	margin: 0;
+}
+
+.home .main-section > .vk_posts > .media.vk_post-col-lg-12 {
+	padding: 10px;
+}
+
+.home .vk_post .vk_post_imgOuter::before {
+	padding-top: 100%;
+}
+
+table {
+	display: table;
+	border-collapse: separate;
+	border-spacing: 10px 10px;
+	width: 100%;
+	border-style: solid;
+	border-width: 4px;
+	border-color: lightblue;	
+}
+
+table th, table td {
+    border: solid 1px #000000;
+	border-width: 3px;
+	border-style: solid;
+	background: white;
+	margin: 10px;
+	text-align: left top;
+	vertical-align: middle;
+	border-color: white lightgray lightgray white;	
+}
+
+/*　モバイルナビのアイコンに文字を表示する 1 */
+.vk-mobile-nav-menu-btn {
+  text-indent: 2px;
+  font-size: 10px;
+  padding-top: 26px;
+  overflow: visible;
+  border: none;
+  background-position: top;
+  height: 40px;
+}
+/*　モバイルナビのアイコンに文字を表示する 2 */
+.vk-mobile-nav-menu-btn.menu-open {
+  border: none;
+}
+/*　モバイルナビのアイコンに文字を表示する 3 */
+.vk-mobile-nav {
+  padding-top: 50px;
+}
+/* サイトロゴとヘッダーナビを縦に積む 
+div#site-header-container {
+  display: block;
+  text-align: center;
+}*/
+
+/*
+.global-nav-list {
+  justify-content: space-between;
+}*/
+
+/* サイトロゴを中央配置とする 
+.site-header--layout--nav-float .site-header-logo {
+  display: inline-block;
+  width: auto;
+}*/
+
+/* スクロール時にロゴ画像を非表示とする
+.header_scrolled .site-header-logo {
+    display: none;
+}*/
+
+/* モバイルメニューを非表示にする */
+.vk-mobile-nav-menu-btn {
+	display: none;
+} 
+
+ /* サイトヘッダー文字列の幅を文字にあわせた固定値を指定する */
+.site-header-logo {
+	min-height: 30px;
+	max-width: 250px; /* 文字がかわると数値もかわる */
+	font-size: 0; /* 余計な空白を消去する */
+	/* 文字を縦横中央のよせる（3行） */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.site-header-logo span {
+    font-size: 25px;   /* 空白除去のため０に設定したフォントをなおす */
+}
+
+/* ヘッダーナビをモバイルであってもコンテンツ幅いっぱいに広げる */
+.global-nav {
+    display: block;
+    width: 100%;
+	overflow: visible !important;
+}
+
+.global-nav-list {
+	font-size: 0;
+
+	width: 100%;
+	height: 100%;
+	flex-wrap: wrap;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	margin: 10px;
+	padding: 10px;
+	flex-direction: row;
+
+	column-gap: 10px;
+	row-gap: 10px;
+	border: solid 10px lihgtblue;
+}
+
+.global-nav li {
+	color: white;
+    justify-content: center;
+    align-items: center;
+
+	border-radius: 50% 20% / 10% 40%;
+	/*outline: 2px solid white; */
+	background-color: yellow;
+
+	font-size: 14px; /* 空白を消すために０にしたサイズを今度はセットする */
+
+	flex-grow: 1; /* 要素が足りない行の幅を広げる */
+	flex-basis: 1;
+	min-width: 150px; /* 最小幅（空間) */
+}
+
+.global-nav-list ul {
+	background-color: black;
+}
+
+.global-nav-list ul li {
+	border-radius: 50% 20% / 10% 40%;
+	background-color: red;
+	font-size: 14px; /* 空白を消すために０にしたサイズを今度はセットする */
+	background-color: red;
+}
+
+.global-nav-list .sub-menu {
+	z-index: 100;
+	max-height: 200px;
+}
+
+.global-nav-list a {
+	padding-left: 12px !important;
+	padding-right: 12px !important;
+}
+
+@media (max-width: 991.9px) {
+  .global-nav-list li .global-nav-name {
+	margin: 12px 0 12px 0 !important; /* 上右下左 */
+	padding: 0 !important;
+  }
+}
+@media (min-width: 992px) {
+  .global-nav-list li .global-nav-name {
+	margin: 0px !important;
+	padding: 0 !important;
+  }
+}
