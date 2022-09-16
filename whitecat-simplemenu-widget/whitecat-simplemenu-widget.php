@@ -10,7 +10,7 @@ Author URI:
 ?>
 
 <?php
-/*  Copyright 2022 Syntaro (email : lpe.syntaro.yoshida@gmail.com)
+/*  Copyright 2022 SynthTAROU
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -34,8 +34,6 @@ function whitecat_simplemenu_widget_register() {
 
 // // // テスト実装マイウィジェット 
 class whitecat_simplemenu_widget extends WP_Widget {
-	protected $footer_text;
-
 	/**
 	 * ウィジェット名などを設定
 	 */
@@ -59,9 +57,20 @@ class whitecat_simplemenu_widget extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
+		echo '<style type="text/css">' . $instance['addcss'] . '</style>';
+
 		// outputs the content of the widget
 		echo $before_widget;
 		
+		echo '<style>'; ?>
+	#whitecat_simplemenu {
+		width: 240px;
+		background-color: <?php echo $instance['background']; ?>;
+		color: <?php echo $instance['color']; ?>
+	}
+	#whitecat_simplemenu a { color: <?php echo $instance['color']; ?>}
+<?php
+		echo '</style>';
 		//ウィジェットで表示する内容
 		echo '<div id="whitecat_simplemenu">';
 		echo '<h3>' . $instance['title'] . '</h3>';
@@ -70,27 +79,6 @@ class whitecat_simplemenu_widget extends WP_Widget {
 		echo '</div>';
 
 		echo $after_widget;
-		
-		echo "<style>" . PHP_EOL;
-		echo "#whitecat_simplemenu {". PHP_EOL;
-		echo "width: 240px;" . PHP_EOL;
-		if($instance['background'] != '') :
-			echo "    background-color: " . $instance['background'] .";" . PHP_EOL;
-		endif;
-		if($instance['color'] != '') :
-			echo "    color: " . $instance['color'] .";" . PHP_EOL;
-		endif;
-		echo '}';
-		if($instance['color'] != '') :
-			echo "    #whitecat_simplemenu a { color: " . $instance['color'] ."; } " . PHP_EOL;
-		/*
-			echo "    #whitecat_simplemenu a:link { color: " . $instance['color'] ." !important; } " . PHP_EOL;
-			echo "    #whitecat_simplemenu a:visited { color: " . $instance['color'] ." !important; } " . PHP_EOL;
-			echo "    #whitecat_simplemenu a:hover { color: " . $instance['color'] ." !important; } " . PHP_EOL;
-			echo "    #whitecat_simplemenu a:active { color: " . $instance['color'] ." !important; } " . PHP_EOL;
-		*/
-		endif;
-		echo "</style>";
 	}
 
 	/**
@@ -120,17 +108,22 @@ class whitecat_simplemenu_widget extends WP_Widget {
 		$menu = $instance['menu'];
 		$color = $instance['color'];
 		$background = $instance['background'];
+		$addcss = $instance['addcss'];
 
 		$name_title = $this->get_field_name ('title');
 		$name_menu = $this->get_field_name ('menu');
 		$name_color = $this->get_field_name ('color');
 		$name_background = $this->get_field_name ('background');
+		$name_addcss = $this->get_field_name ('addcss');
 
 		$esc_title = esc_attr($title);
 		$esc_menu = esc_attr($menu);
 		$esc_color = esc_attr($color);
 		$esc_background = esc_attr($background);
-
+		$esc_addcss = esc_attr($addcss);
+		
+		$whitecat_make_css = "whitecat_make_css";
+		
 		echo "<p>タイトル: <input class='widefat'";
 		echo " name='" . $name_title . "'";
 		echo " type='text' value='" . $esc_title . "'>";
@@ -159,6 +152,13 @@ class whitecat_simplemenu_widget extends WP_Widget {
 		echo '<input name="' . $name_background . '" ';
 		echo 'type="color" value="' . $esc_background . '">';
 		echo '</p>';
+		echo '<p>追加CSSは、#whitecat_simplemenu a:link { color: ???; }として設定できます</p>';
+/*
+	#whitecat_simplemenu a:link { color: <?php echo $instance['color']; ?>}
+	#whitecat_simplemenu a:visited { color: <?php echo $instance['color']; ?>}
+	#whitecat_simplemenu a:hover { color: <?php echo $instance['color']; ?>}
+	#whitecat_simplemenu a:active { color: <?php echo $instance['color']; ?>}
+*/
 	}
 }
 
