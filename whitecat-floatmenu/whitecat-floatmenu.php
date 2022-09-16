@@ -11,7 +11,7 @@ Author URI:
 ?>
 
 <?php
-/*  Copyright 2022 Syntarou (email : lpe.syntaro.yoshida@gmail.com)
+/*  Copyright 2022 SynthTAROU (email : yamanaka.kinoko@gmail.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -31,7 +31,8 @@ Author URI:
 <?php
 
 function whitecat_body_php_include()  {
-	echo '<div id="whitecat-htmlbody">';
+	echo '<div id="whitecat-htmlbody">' . PHP_EOL;
+	whitecat_floatmenu_styles();
 }
 add_action('wp_body_open', 'whitecat_body_php_include');
 
@@ -42,14 +43,10 @@ function whitecat_floatmenu_include()  {
 		<?php whitecat_floatmenu_show(); ?>
 		</div>
 		</aside>
+	</div> <!-- whitecat-htmlbody -->
 <?php
 }
 add_action('wp_footer', 'whitecat_floatmenu_include');
-
-function whitecat_footer_php_include()  {
-	echo '</div> <!-- whitecat-htmlbody -->';
-}
-add_action('wp_footer', 'whitecat_footer_php_include');
 
 add_action('admin_menu', 'custom_menu_page');
 
@@ -272,7 +269,10 @@ function whitecat_floatmenu_show() {
 		wp_nav_menu( array ('menu'=>$menu_default ) );
 	}
 	echo "</div></aside>";
-	
+}
+
+function whitecat_floatmenu_styles() {
+
 	$color_background = get_option('backgroundcolor');
 	if ($color_background == '') {
 		$color_background = '#64a404';
@@ -298,7 +298,25 @@ function whitecat_floatmenu_show() {
 		$widthbywhitecat = '1';
 	}
 ?>
-<style>
+<style type="text/css">
+    @media (min-width: 993px) {
+		body {
+			background-color: lightblue;
+		}
+		#whitecat-htmlbody {
+			background-color: white;
+<?php
+			if ($menu_custom != '' || $menu_default != '') {
+				echo 'margin-bottom: ' . $pluginheight . 'px;';
+			}
+			if ($widthbywhitecat != '0') { ?>
+				max-width: <?php echo $viewportwidth; ?>px;
+			    margin-left: auto;
+			    margin-right: auto;
+<?php		} ?>
+
+		}
+	}
 	#whitecat-floatmenu {
 		background-color: <?php echo $color_background; ?> !important;
 		color: <?php echo $textcolor; ?> !important;
@@ -336,6 +354,7 @@ function whitecat_floatmenu_show() {
 		padding: 0;
 		margin: 0;
 		font-size: 14px;
+		border-left: 1px solid #fff;
 		border-right: 1px solid #fff;
 	}
 
@@ -378,5 +397,6 @@ function whitecat_floatmenu_show() {
 		}
 	}
 </style>
-<?php }
+<?php
+}
 ?>
