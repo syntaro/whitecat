@@ -4,7 +4,7 @@ Plugin Name: WhiteCat SimpleMenu Widget
 Plugin URI: 
 Description: Menuを表示するウィジェットを追加する
 Author: SynTAROU
-Version: 0.9
+Version: 1.0
 Author URI:
 */
 /*  Copyright 2022 SynTAROU
@@ -32,26 +32,9 @@ function whitecat_simplemenu_widget_register() {
 function whitecat_simplemenu_widget_script() {
 ?>
 
-<script type="text/javascript">
-function whitecat_simplemenu_buttonaction(color_css, background_css, text_css) {
-	var color = document.getElementById(color_css).value
-	var back = document.getElementById(background_css).value
-	var text = "#whitecat_simplemenu {\n";
-	text = text + "    width: 240px;\n";
-	text = text + "    color: " + color + ";\n";
-	text = text + "    background-color: " + back + ";\n";
-	text = text + "}\n";
-	text = text + "#whitecat_simplemenu a { color: " + color + "; }\n";
-	text = text + "#whitecat_simplemenu a:link { color: " + color + "; }\n";
-	text = text + "#whitecat_simplemenu a:visited { color: " + color + "; }\n";
-	text = text + "#whitecat_simplemenu a:hover { color: " + color + "; }\n";
-	text = text + "#whitecat_simplemenu a:active { color: " + color + "; }\n";
-	document.getElementById(text_css).value = text;
-}
-</script>
 <?php
 }
-add_action('admin_print_scripts', 'whitecat_simplemenu_widget_script');
+//add_action('admin_print_scripts', 'whitecat_simplemenu_widget_script');
 
 // // // テスト実装マイウィジェット 
 class whitecat_simplemenu_widget extends WP_Widget {
@@ -78,18 +61,34 @@ class whitecat_simplemenu_widget extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
-		echo '<style type="text/css">' . $instance['text_css'] . '</style>';
-
 		// outputs the content of the widget
 		echo $before_widget;
 		//ウィジェットで表示する内容
-		echo '<div id="whitecat_simplemenu">';
+		echo '<div id="whitecat_simplemenu_' . $this->number . '">';
 		echo '<h3>' . $instance['title'] . '</h3>';
 		$footer_text = wp_nav_menu(array('menu' => $instance['menu'], 'echo' => 'false'));
 		echo $footer_text;
 		echo '</div>';
 
-		echo $after_widget;
+		$color = $instance['color'];
+		$background_css = $instance['background'];
+		$esc_color_css = esc_attr($color);
+		$esc_background_css = esc_attr($background_css);
+?>
+<style>
+#whitecat_simplemenu_<?php echo $this->number; ?> {
+   width: 240px;
+   color: <?php echo $esc_color_css; ?>;
+   background-color: <?php echo $esc_background_css; ?>;
+   a { color: <?php echo $esc_color_css; ?>; }
+   a:link { color: <?php echo $esc_color_css; ?>; }
+   a:visited { color: <?php echo $esc_color_css; ?>; }
+   a:hover { color: <?php echo $esc_color_css; ?>; }
+   a:active { color: <?php echo $esc_color_css; ?>; }
+   <?php echo $instance['text_css']; ?>
+}
+</style>
+<?php
 	}
 
 	/**
@@ -170,13 +169,34 @@ class whitecat_simplemenu_widget extends WP_Widget {
 		<input name="<?php echo $name_background_css; ?>" id="<?php echo $name_background_css;?>" type="color" 
 			   value="<?php echo $esc_background_css; ?>">
 	</p>
+<?php
+		/*
 	<p>
 		<button name="<?php echo $name_button_css; ?>" onclick="<?php echo $func_name?>">
 			CSSに色を反映する</button>
 		CSS（ウィジェット画面で使われます)
 		<textarea name="<?php echo $name_text_css; ?>" id="<?php echo $name_text_css; ?>"><?php echo $esc_text_css; ?></textarea>
 </p>
-<?php
+		*/
+?>
+
+<script type="text/javascript">
+function whitecat_simplemenu_buttonaction(color_css, background_css, text_css) {
+	var color = document.getElementById(color_css).value
+	var back = document.getElementById(background_css).value
+	var text = "#whitecat_simplemenu {\n";
+	text = text + "    width: 240px;\n";
+	text = text + "    color: " + color + ";\n";
+	text = text + "    background-color: " + back + ";\n";
+	text = text + "}\n";
+	text = text + "#whitecat_simplemenu a { color: " + color + "; }\n";
+	text = text + "#whitecat_simplemenu a:link { color: " + color + "; }\n";
+	text = text + "#whitecat_simplemenu a:visited { color: " + color + "; }\n";
+	text = text + "#whitecat_simplemenu a:hover { color: " + color + "; }\n";
+	text = text + "#whitecat_simplemenu a:active { color: " + color + "; }\n";
+	document.getElementById(text_css).value = text;
+}
+</script><?php
 	}
 }
 
