@@ -3,11 +3,11 @@
 Plugin Name: WhiteCat SimpleMenu Widget
 Plugin URI: 
 Description: Menuを表示するウィジェットを追加する
-Author: SynthTAROU
+Author: SynTAROU
 Version: 0.9
 Author URI:
 */
-/*  Copyright 2022 SynthTAROU
+/*  Copyright 2022 SynTAROU
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -33,7 +33,7 @@ function whitecat_simplemenu_widget_script() {
 ?>
 
 <script type="text/javascript">
-function test_button(color_css, background_css, text_css) {
+function whitecat_simplemenu_buttonaction(color_css, background_css, text_css) {
 	var color = document.getElementById(color_css).value
 	var back = document.getElementById(background_css).value
 	var text = "#whitecat_simplemenu {\n";
@@ -139,7 +139,7 @@ class whitecat_simplemenu_widget extends WP_Widget {
 		$esc_text_css = esc_attr($text_css);
 		$esc_button_css = esc_attr($button_css);
 		
-		$func_name = "javascript:test_button";
+		$func_name = "javascript:whitecat_simplemenu_buttonaction";
 		$func_name .= "('" . $name_color_css.  "', '". $name_background_css . "', '". $name_text_css . "');";
 
 		echo "<p>タイトル: <input class='widefat'";
@@ -171,12 +171,10 @@ class whitecat_simplemenu_widget extends WP_Widget {
 			   value="<?php echo $esc_background_css; ?>">
 	</p>
 	<p>
-		<button name="<?php echo $name_button_css; ?>"
-				onclick="<?php echo $func_name?>">
-				CSS RESET</button>
-		<textarea name="<?php echo $name_text_css; ?>" id="<?php echo $name_text_css; ?>">
-		<?php echo $esc_text_css; ?>
-		</textarea>
+		<button name="<?php echo $name_button_css; ?>" onclick="<?php echo $func_name?>">
+			CSSに色を反映する</button>
+		CSS（ウィジェット画面で使われます)
+		<textarea name="<?php echo $name_text_css; ?>" id="<?php echo $name_text_css; ?>"><?php echo $esc_text_css; ?></textarea>
 </p>
 <?php
 	}
