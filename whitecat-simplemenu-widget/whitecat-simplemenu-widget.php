@@ -4,12 +4,9 @@ Plugin Name: WhiteCat SimpleMenu Widget
 Plugin URI: 
 Description: Menuを表示するウィジェットを追加する
 Author: SynthTAROU
-Version: 0.1
+Version: 0.9
 Author URI:
 */
-?>
-
-<?php
 /*  Copyright 2022 SynthTAROU
 
     This program is free software; you can redistribute it and/or modify
@@ -31,6 +28,30 @@ add_action('widgets_init', 'whitecat_simplemenu_widget_register' );
 function whitecat_simplemenu_widget_register() {
 	register_widget( 'whitecat_simplemenu_widget' );
 }
+
+function whitecat_simplemenu_widget_script() {
+?>
+
+<script type="text/javascript">
+function test_button(color_css, background_css, text_css) {
+	var color = document.getElementById(color_css).value
+	var back = document.getElementById(background_css).value
+	var text = "#whitecat_simplemenu {\n";
+	text = text + "    width: 240px;\n";
+	text = text + "    color: " + color + ";\n";
+	text = text + "    background-color: " + back + ";\n";
+	text = text + "}\n";
+	text = text + "#whitecat_simplemenu a { color: " + color + "; }\n";
+	text = text + "#whitecat_simplemenu a:link { color: " + color + "; }\n";
+	text = text + "#whitecat_simplemenu a:visited { color: " + color + "; }\n";
+	text = text + "#whitecat_simplemenu a:hover { color: " + color + "; }\n";
+	text = text + "#whitecat_simplemenu a:active { color: " + color + "; }\n";
+	document.getElementById(text_css).value = text;
+}
+</script>
+<?php
+}
+add_action('admin_print_scripts', 'whitecat_simplemenu_widget_script');
 
 // // // テスト実装マイウィジェット 
 class whitecat_simplemenu_widget extends WP_Widget {
@@ -57,20 +78,10 @@ class whitecat_simplemenu_widget extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
-		echo '<style type="text/css">' . $instance['addcss'] . '</style>';
+		echo '<style type="text/css">' . $instance['text_css'] . '</style>';
 
 		// outputs the content of the widget
 		echo $before_widget;
-		
-		echo '<style>'; ?>
-	#whitecat_simplemenu {
-		width: 240px;
-		background-color: <?php echo $instance['background']; ?>;
-		color: <?php echo $instance['color']; ?>
-	}
-	#whitecat_simplemenu a { color: <?php echo $instance['color']; ?>}
-<?php
-		echo '</style>';
 		//ウィジェットで表示する内容
 		echo '<div id="whitecat_simplemenu">';
 		echo '<h3>' . $instance['title'] . '</h3>';
@@ -93,6 +104,7 @@ class whitecat_simplemenu_widget extends WP_Widget {
 		$instance['menu'] = sanitize_text_field( $new_instance['menu'] );
 		$instance['color'] = sanitize_text_field( $new_instance['color'] );
 		$instance['background'] = sanitize_text_field( $new_instance['background'] );
+		$instance['text_css'] = sanitize_text_field( $new_instance['text_css'] );
 		return $instance;
 	}
 
@@ -101,35 +113,40 @@ class whitecat_simplemenu_widget extends WP_Widget {
 			'title' => 'タイトルを入力',
 			'menu' => 'メニューを選択',
 			'color' => '文字色',
-			'background' => '背景色'
+			'background' => '背景色',
+			'text_css' => '追加CSS',
+			'button_css' => 'ボタン',
 		);
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$title = $instance['title'];
 		$menu = $instance['menu'];
 		$color = $instance['color'];
-		$background = $instance['background'];
-		$addcss = $instance['addcss'];
+		$background_css = $instance['background'];
+		$text_css = $instance['text_css'];
+		$button_css = $instance['button_css'];
 
 		$name_title = $this->get_field_name ('title');
 		$name_menu = $this->get_field_name ('menu');
-		$name_color = $this->get_field_name ('color');
-		$name_background = $this->get_field_name ('background');
-		$name_addcss = $this->get_field_name ('addcss');
+		$name_color_css = $this->get_field_name ('color');
+		$name_background_css = $this->get_field_name ('background');
+		$name_text_css = $this->get_field_name ('text_css');
+		$name_button_css = $this->get_field_name ('button_css');
 
 		$esc_title = esc_attr($title);
 		$esc_menu = esc_attr($menu);
-		$esc_color = esc_attr($color);
-		$esc_background = esc_attr($background);
-		$esc_addcss = esc_attr($addcss);
+		$esc_color_css = esc_attr($color);
+		$esc_background_css = esc_attr($background_css);
+		$esc_text_css = esc_attr($text_css);
+		$esc_button_css = esc_attr($button_css);
 		
-		$whitecat_make_css = "whitecat_make_css";
-		
+		$func_name = "javascript:test_button";
+		$func_name .= "('" . $name_color_css.  "', '". $name_background_css . "', '". $name_text_css . "');";
+
 		echo "<p>タイトル: <input class='widefat'";
 		echo " name='" . $name_title . "'";
 		echo " type='text' value='" . $esc_title . "'>";
 		echo "</p>";
 		echo "<p>メニュー:";
-
 		$nav_menus = wp_get_nav_menus();
 		if ( count( $nav_menus ) > 0 ) :
 			echo "<select name='" . $name_menu . "'>";
@@ -143,22 +160,25 @@ class whitecat_simplemenu_widget extends WP_Widget {
 			}
 			echo '</select>';
 		endif ;
-		echo '</p>';
-		echo '<p>文字カラー:' . PHP_EOL;
-		echo '<input name="' . $name_color . '" ';
-		echo 'type="color" value="' . $esc_color . '">';
-		echo '</p>';
-		echo '<p>背景カラー:' . PHP_EOL;
-		echo '<input name="' . $name_background . '" ';
-		echo 'type="color" value="' . $esc_background . '">';
-		echo '</p>';
-		echo '<p>追加CSSは、#whitecat_simplemenu a:link { color: ???; }として設定できます</p>';
-/*
-	#whitecat_simplemenu a:link { color: <?php echo $instance['color']; ?>}
-	#whitecat_simplemenu a:visited { color: <?php echo $instance['color']; ?>}
-	#whitecat_simplemenu a:hover { color: <?php echo $instance['color']; ?>}
-	#whitecat_simplemenu a:active { color: <?php echo $instance['color']; ?>}
-*/
+?>
+	</p>
+	<p>文字カラー:
+		<input name="<?php echo $name_color_css; ?>" id="<?php echo $name_color_css;?>" type="color" 
+			   value="<?php echo $esc_color_css; ?>">
+	</p>
+	<p>背景カラー:
+		<input name="<?php echo $name_background_css; ?>" id="<?php echo $name_background_css;?>" type="color" 
+			   value="<?php echo $esc_background_css; ?>">
+	</p>
+	<p>
+		<button name="<?php echo $name_button_css; ?>"
+				onclick="<?php echo $func_name?>">
+				CSS RESET</button>
+		<textarea name="<?php echo $name_text_css; ?>" id="<?php echo $name_text_css; ?>">
+		<?php echo $esc_text_css; ?>
+		</textarea>
+</p>
+<?php
 	}
 }
 
