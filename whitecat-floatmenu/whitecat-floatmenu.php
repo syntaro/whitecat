@@ -92,7 +92,7 @@ function whitecat_floatmenu_add_menu()
 ?>
     <div class="metabox-holder">
       <div class="postbox ">
-        <h3 class='hndle'><span>メニュー設定</span></h3>
+        <h3 class='handle'><span>メニュー設定</span></h3>
         <div class="inside">
           <div class="main">
             <p class="setting_description">ページとフッターメニューを紐づけてください。</p>
