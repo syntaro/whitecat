@@ -2,7 +2,7 @@
 Theme Name: WhiteCat Theme A
 Theme URI:
 Description: WhiteCat Theme A
-Author: Syntaro
+Author: SynthTAROU
 Author URI:
 Template: lightning
 Version:0.1
@@ -37,57 +37,6 @@ html {
 	color: black;
 	text-decoration: underline;
 	font-weight: bold;
-}
-
-/* 背景のあるHTMLリンクの色1 */
-.has-background a {
-	font-weight: bold;
-}
-
-/* 背景のあるHTMLリンクの色2 */
-.has-background a:link {
-	color: yellow;
-}
-
-/* 背景のあるHTMLリンクの色3 */
-.has-background a:visited {
-	color: yellow;
-}
-
-/* 背景のあるHTMLリンクの色4 */
-.has-background a:hover {
-	color: #00FF99;
-}
-
-/* 背景のあるHTMLリンクの色5 */
-.has-background a:active {
-	color: #FFCC33;
-}
-
-/* 背景のないHTMLリンクの色1 */
-.white-background a {
-	font-weight: bold;
-	text-decoration: underline;
-}
-
-/* 背景のないHTMLリンクの色2 */
-.white-background a:link {
-	color: #00FFAA;
-}
-
-/* 背景のないHTMLリンクの色3 */
-.white-background a:visited {
-	color: #8080AA;
-}
-
-/* 背景のないHTMLリンクの色4 */
-.white-background a:hover {
-	color: #FF0000;
-}
-
-/* 背景のないHTMLリンクの色5 */
-.white-background a:active {
-	color: #aaaa00;
 }
 
 /* コピーライトから、lightningの部分のみを消す */
@@ -311,20 +260,33 @@ div#site-header-container {
 
 .global-nav-list ul li {
 	border-radius: 50% 20% / 10% 40%;
-	background-color: red;
+	background-color: green;
 	font-size: 14px; /* 空白を消すために０にしたサイズを今度はセットする */
-	background-color: red;
+	max-height: 400px;
+}
+
+.global-nav-list .sub-menu .menu-item {
+	max-height: 400px;
+	position: fixed;
 }
 
 .global-nav-list .sub-menu {
+  width: 150px;
+  background: lightgray;
 	z-index: 100;
-	max-height: 200px;
+}
+.site-body {
+	z-index: 0;
 }
 
+.global-nav-list .sub-menu li {
+  list-style: none;
+}
+/*
 .global-nav-list a {
 	padding-left: 12px !important;
 	padding-right: 12px !important;
-}
+}*/
 
 @media (max-width: 991.9px) {
   .global-nav-list li .global-nav-name {
@@ -338,3 +300,4 @@ div#site-header-container {
 	padding: 0 !important;
   }
 }
+

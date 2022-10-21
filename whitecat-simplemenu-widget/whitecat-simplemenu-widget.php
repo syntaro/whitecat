@@ -3,14 +3,11 @@
 Plugin Name: WhiteCat SimpleMenu Widget
 Plugin URI: 
 Description: Menuを表示するウィジェットを追加する
-Author: SynthTAROU
-Version: 0.1
+Author: SynTAROU
+Version: 1.0
 Author URI:
 */
-?>
-
-<?php
-/*  Copyright 2022 Syntaro (email : lpe.syntaro.yoshida@gmail.com)
+/*  Copyright 2022 SynTAROU
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -32,10 +29,15 @@ function whitecat_simplemenu_widget_register() {
 	register_widget( 'whitecat_simplemenu_widget' );
 }
 
+function whitecat_simplemenu_widget_script() {
+?>
+
+<?php
+}
+//add_action('admin_print_scripts', 'whitecat_simplemenu_widget_script');
+
 // // // テスト実装マイウィジェット 
 class whitecat_simplemenu_widget extends WP_Widget {
-	protected $footer_text;
-
 	/**
 	 * ウィジェット名などを設定
 	 */
@@ -61,36 +63,32 @@ class whitecat_simplemenu_widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 		// outputs the content of the widget
 		echo $before_widget;
-		
 		//ウィジェットで表示する内容
-		echo '<div id="whitecat_simplemenu">';
+		echo '<div id="whitecat_simplemenu_' . $this->number . '">';
 		echo '<h3>' . $instance['title'] . '</h3>';
 		$footer_text = wp_nav_menu(array('menu' => $instance['menu'], 'echo' => 'false'));
 		echo $footer_text;
 		echo '</div>';
 
-		echo $after_widget;
-		
-		echo "<style>" . PHP_EOL;
-		echo "#whitecat_simplemenu {". PHP_EOL;
-		echo "width: 240px;" . PHP_EOL;
-		if($instance['background'] != '') :
-			echo "    background-color: " . $instance['background'] .";" . PHP_EOL;
-		endif;
-		if($instance['color'] != '') :
-			echo "    color: " . $instance['color'] .";" . PHP_EOL;
-		endif;
-		echo '}';
-		if($instance['color'] != '') :
-			echo "    #whitecat_simplemenu a { color: " . $instance['color'] ."; } " . PHP_EOL;
-		/*
-			echo "    #whitecat_simplemenu a:link { color: " . $instance['color'] ." !important; } " . PHP_EOL;
-			echo "    #whitecat_simplemenu a:visited { color: " . $instance['color'] ." !important; } " . PHP_EOL;
-			echo "    #whitecat_simplemenu a:hover { color: " . $instance['color'] ." !important; } " . PHP_EOL;
-			echo "    #whitecat_simplemenu a:active { color: " . $instance['color'] ." !important; } " . PHP_EOL;
-		*/
-		endif;
-		echo "</style>";
+		$color = $instance['color'];
+		$background_css = $instance['background'];
+		$esc_color_css = esc_attr($color);
+		$esc_background_css = esc_attr($background_css);
+?>
+<style>
+#whitecat_simplemenu_<?php echo $this->number; ?> {
+   width: 240px;
+   color: <?php echo $esc_color_css; ?>;
+   background-color: <?php echo $esc_background_css; ?>;
+   a { color: <?php echo $esc_color_css; ?>; }
+   a:link { color: <?php echo $esc_color_css; ?>; }
+   a:visited { color: <?php echo $esc_color_css; ?>; }
+   a:hover { color: <?php echo $esc_color_css; ?>; }
+   a:active { color: <?php echo $esc_color_css; ?>; }
+   <?php echo $instance['text_css']; ?>
+}
+</style>
+<?php
 	}
 
 	/**
@@ -105,6 +103,7 @@ class whitecat_simplemenu_widget extends WP_Widget {
 		$instance['menu'] = sanitize_text_field( $new_instance['menu'] );
 		$instance['color'] = sanitize_text_field( $new_instance['color'] );
 		$instance['background'] = sanitize_text_field( $new_instance['background'] );
+		$instance['text_css'] = sanitize_text_field( $new_instance['text_css'] );
 		return $instance;
 	}
 
@@ -113,30 +112,40 @@ class whitecat_simplemenu_widget extends WP_Widget {
 			'title' => 'タイトルを入力',
 			'menu' => 'メニューを選択',
 			'color' => '文字色',
-			'background' => '背景色'
+			'background' => '背景色',
+			'text_css' => '追加CSS',
+			'button_css' => 'ボタン',
 		);
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$title = $instance['title'];
 		$menu = $instance['menu'];
 		$color = $instance['color'];
-		$background = $instance['background'];
+		$background_css = $instance['background'];
+		$text_css = $instance['text_css'];
+		$button_css = $instance['button_css'];
 
 		$name_title = $this->get_field_name ('title');
 		$name_menu = $this->get_field_name ('menu');
-		$name_color = $this->get_field_name ('color');
-		$name_background = $this->get_field_name ('background');
+		$name_color_css = $this->get_field_name ('color');
+		$name_background_css = $this->get_field_name ('background');
+		$name_text_css = $this->get_field_name ('text_css');
+		$name_button_css = $this->get_field_name ('button_css');
 
 		$esc_title = esc_attr($title);
 		$esc_menu = esc_attr($menu);
-		$esc_color = esc_attr($color);
-		$esc_background = esc_attr($background);
+		$esc_color_css = esc_attr($color);
+		$esc_background_css = esc_attr($background_css);
+		$esc_text_css = esc_attr($text_css);
+		$esc_button_css = esc_attr($button_css);
+		
+		$func_name = "javascript:whitecat_simplemenu_buttonaction";
+		$func_name .= "('" . $name_color_css.  "', '". $name_background_css . "', '". $name_text_css . "');";
 
 		echo "<p>タイトル: <input class='widefat'";
 		echo " name='" . $name_title . "'";
 		echo " type='text' value='" . $esc_title . "'>";
 		echo "</p>";
 		echo "<p>メニュー:";
-
 		$nav_menus = wp_get_nav_menus();
 		if ( count( $nav_menus ) > 0 ) :
 			echo "<select name='" . $name_menu . "'>";
@@ -150,15 +159,44 @@ class whitecat_simplemenu_widget extends WP_Widget {
 			}
 			echo '</select>';
 		endif ;
-		echo '</p>';
-		echo '<p>文字カラー:' . PHP_EOL;
-		echo '<input name="' . $name_color . '" ';
-		echo 'type="color" value="' . $esc_color . '">';
-		echo '</p>';
-		echo '<p>背景カラー:' . PHP_EOL;
-		echo '<input name="' . $name_background . '" ';
-		echo 'type="color" value="' . $esc_background . '">';
-		echo '</p>';
+?>
+	</p>
+	<p>文字カラー:
+		<input name="<?php echo $name_color_css; ?>" id="<?php echo $name_color_css;?>" type="color" 
+			   value="<?php echo $esc_color_css; ?>">
+	</p>
+	<p>背景カラー:
+		<input name="<?php echo $name_background_css; ?>" id="<?php echo $name_background_css;?>" type="color" 
+			   value="<?php echo $esc_background_css; ?>">
+	</p>
+<?php
+		/*
+	<p>
+		<button name="<?php echo $name_button_css; ?>" onclick="<?php echo $func_name?>">
+			CSSに色を反映する</button>
+		CSS（ウィジェット画面で使われます)
+		<textarea name="<?php echo $name_text_css; ?>" id="<?php echo $name_text_css; ?>"><?php echo $esc_text_css; ?></textarea>
+</p>
+		*/
+?>
+
+<script type="text/javascript">
+function whitecat_simplemenu_buttonaction(color_css, background_css, text_css) {
+	var color = document.getElementById(color_css).value
+	var back = document.getElementById(background_css).value
+	var text = "#whitecat_simplemenu {\n";
+	text = text + "    width: 240px;\n";
+	text = text + "    color: " + color + ";\n";
+	text = text + "    background-color: " + back + ";\n";
+	text = text + "}\n";
+	text = text + "#whitecat_simplemenu a { color: " + color + "; }\n";
+	text = text + "#whitecat_simplemenu a:link { color: " + color + "; }\n";
+	text = text + "#whitecat_simplemenu a:visited { color: " + color + "; }\n";
+	text = text + "#whitecat_simplemenu a:hover { color: " + color + "; }\n";
+	text = text + "#whitecat_simplemenu a:active { color: " + color + "; }\n";
+	document.getElementById(text_css).value = text;
+}
+</script><?php
 	}
 }
 
