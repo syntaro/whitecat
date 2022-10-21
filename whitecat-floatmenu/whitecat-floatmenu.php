@@ -11,7 +11,7 @@ Author URI:
 ?>
 
 <?php
-/*  Copyright 2022 SynthTAROU
+/*  Copyright 2022 SynthTAROU (email : yamanaka.kinoko@gmail.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -29,7 +29,6 @@ Author URI:
 ?>
 
 <?php
-
 function whitecat_body_php_include()  {
 	echo '<div id="whitecat-htmlbody">' . PHP_EOL;
 	whitecat_floatmenu_styles();
@@ -37,14 +36,8 @@ function whitecat_body_php_include()  {
 add_action('wp_body_open', 'whitecat_body_php_include');
 
 function whitecat_floatmenu_include()  {
-	?>
-		<aside>
-		<div id='whitecat-floatmenu'>
-		<?php whitecat_floatmenu_show(); ?>
-		</div>
-		</aside>
-	</div> <!-- whitecat-htmlbody -->
-<?php
+	whitecat_floatmenu_show();
+	echo '</div> <!-- whitecat-htmlbody -->'.PHP_EOL;
 }
 add_action('wp_footer', 'whitecat_floatmenu_include');
 
@@ -83,9 +76,13 @@ function whitecat_floatmenu_add_menu()
 	if ($pluginheight == '') {
 		$pluginheight = '80';
 	}
-	$viewportwidth = get_option('viewportwidth');
-	if ($viewportwidth == '') {
-		$viewportwidth = '993';
+	$viewportwidth1 = get_option('viewportwidth1');
+	if ($viewportwidth1 == '') {
+		$viewportwidth1 = '993';
+	}
+	$viewportwidth2 = get_option('viewportwidth2');
+	if ($viewportwidth2 == '') {
+		$viewportwidth2 = '1400';
 	}
 	$widthbywhitecat = get_option('widthbywhitecat');
 	if ($widthbywhitecat == '') {
@@ -141,13 +138,15 @@ function whitecat_floatmenu_add_menu()
             <p class="setting_description">高さ (推奨 80px)</p>
 			  <input type="number" name="pluginheight" min="0" max="200"
 					 value="<?php echo $pluginheight; ?>">
-            <p class="setting_description">テーマやプラグインで画面最大幅を指定していますか？(0: していない993: WhiteCat Theme ETC)</p>
-			  <input type="number" name="viewportwidth" min="0" max="2000"
-					 value="<?php echo $viewportwidth; ?>">
+            <p class="setting_description">テーマやプラグインで画面最大幅を指定していますか？(0: していない 993+1400: WhiteCat Theme ETC)</p>
+			  <input type="number" name="viewportwidth1" min="0" max="2000"
+					 value="<?php echo $viewportwidth1; ?>">
+			  <input type="number" name="viewportwidth2" min="0" max="2000"
+					 value="<?php echo $viewportwidth2; ?>">
             <p class="setting_description">このプラグインで幅を変更しますか？(推奨： どちらでも)</p>
 			  <input type="number" name="widthbywhitecat" min="0" max="1"
 					 value="<?php echo $widthbywhitecat; ?>">
-	      </div>
+	      </div>
         </div>
       </div>
     <?php submit_button(); ?>
@@ -220,7 +219,8 @@ function whitecat_floatmenu_register_setting()
     register_setting('whitecat-floatmenu', 'backgroundcolor');
     register_setting('whitecat-floatmenu', 'pluginopacity');
     register_setting('whitecat-floatmenu', 'pluginheight');
-	register_setting('whitecat-floatmenu', 'viewportwidth');
+	register_setting('whitecat-floatmenu', 'viewportwidth1');
+	register_setting('whitecat-floatmenu', 'viewportwidth2');
 	register_setting('whitecat-floatmenu', 'widthbywhitecat');
 }
 
@@ -289,36 +289,43 @@ function whitecat_floatmenu_styles() {
 	if ($pluginheight == '') {
 		$pluginheight = '80';
 	}
-	$viewportwidth = get_option('viewportwidth');
-	if ($viewportwidth == '') {
-		$viewportwidth = '993';
+	$viewportwidth1 = get_option('viewportwidth1');
+	if ($viewportwidth1 == '') {
+		$viewportwidth1 = '993';
+	}
+	$viewportwidth2 = get_option('viewportwidth2');
+	if ($viewportwidth2 == '') {
+		$viewportwidth2 = '1400';
 	}
 	$widthbywhitecat = get_option('widthbywhitecat');
 	if ($widthbywhitecat == '') {
 		$widthbywhitecat = '1';
 	}
-?>
-<style type="text/css">
-    @media (min-width: 993px) {
-		body {
-			background-color: lightblue;
-		}
-		#whitecat-htmlbody {
-			background-color: white;
-<?php
-			if ($menu_custom != '' || $menu_default != '') {
-				echo 'margin-bottom: ' . $pluginheight . 'px;';
-			}
-			if ($widthbywhitecat != '0') { ?>
-				max-width: <?php echo $viewportwidth; ?>px;
-			    margin-left: auto;
-			    margin-right: auto;
-<?php		} ?>
-
-		}
+	if ($menu_custom != '' || $menu_default != '') {
+		$margin1 = 'margin-bottom: ' . $pluginheight . 'px;' . PHP_EOL;
+	}else {
+		$margin1 = '';
+	}
+	$margin2 = 'margin-left: auto;' . PHP_EOL . 'margin-right: auto;' . PHP_EOL;
+	if ($widthbywhitecat != '0') { 
+		$maxwidth1 = 'max-width: ' . $viewportwidth1 . 'px; ' . PHP_EOL;
+		$maxwidth2 = 'max-width: ' . $viewportwidth2 . 'px; ' . PHP_EOL;
+	}else {
+		$maxwidth1 = '';
+		$maxwidth2 = '';
+	}
+	echo '<style type="text/css">'.PHP_EOL;
+	?>
+	body {
+		background-color: lightblue;
+	}
+	<?php
+    if ($viewportwidth1 != $viewportwidth2) { ?>
+	#whitecat-htmlbody {
+		background-color: white;
 	}
 	#whitecat-floatmenu {
-		background-color: <?php echo $color_background; ?> !important;
+		background-color: <?php echo $color_background ; ?> !important;
 		color: <?php echo $textcolor; ?> !important;
 		opacity: <?php echo $pluginopacity;?>% !important;
 
@@ -327,14 +334,29 @@ function whitecat_floatmenu_styles() {
 
 		position: fixed;
 		bottom: 0;
-
-<?php		if ($viewportwidth != '0') { ?>
-				max-width: <?php echo $viewportwidth; ?>px;
-				margin-left: auto;
-				margin-right: auto;
-<?php		} ?>
 		width: 100%;
 		z-index: 100;
+	}
+    @media screen and (min-width: <?php echo $viewportwidth1; ?>px) and (max-width: <?php echo ($viewportwidth2 - 0.1); ?>px) {
+		#whitecat-htmlbody {
+			<?php echo $margin1 . $margin2; ?>
+			<?php echo $maxwidth1; ?> 
+		}
+		#whitecat-floatmenu {
+			<?php echo $margin2; ?>
+		    <?php echo $maxwidth1; ?>
+		}
+	}
+  <?php } ?>
+    @media screen and (min-width: <?php echo $viewportwidth2; ?>px) {
+		#whitecat-htmlbody {
+			<?php echo $margin1 . $margin2; ?>
+			<?php echo $maxwidth2; ?> 
+		}
+		#whitecat-floatmenu {
+			<?php echo $margin2; ?>
+		    <?php echo $maxwidth2; ?>
+		}
 	}
 
 	/*メニューを横並びにする
@@ -359,44 +381,12 @@ function whitecat_floatmenu_styles() {
 	}
 
 	#whitecat-floatmenu li a{
-		text-align: center;
+		text-align: center;	
 		color: <?php echo $textcolor; ?> !important;
 		display:block;
 		width: 100%;
-		padding:20px;
+		padding:20px;	
 	}
-</style>
-<?php
-
-	$viewportwidth = get_option('viewportwidth');
-	if ($viewportwidth == '') {
-		$viewportwidth = '993';
-	}
-	$widthbywhitecat = get_option('widthbywhitecat');
-	if ($widthbywhitecat == '') {
-		$widthbywhitecat = '1';
-	}
-?>
-<style type="text/css">
-    @media (min-width: 993px) {
-		body {
-			background-color: lightblue;
-		}
-		#whitecat-htmlbody {
-			background-color: white;
-<?php
-			if ($menu_custom != '' || $menu_default != '') {
-				echo 'margin-bottom: ' . $pluginheight . 'px;';
-			}
-			if ($widthbywhitecat != '0') { ?>
-				max-width: <?php echo $viewportwidth; ?>px;
-			    margin-left: auto;
-			    margin-right: auto;
-<?php		} ?>
-
-		}
-	}
-</style>
+	</style>
 <?php
 }
-?>
