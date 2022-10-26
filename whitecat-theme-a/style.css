@@ -39,11 +39,6 @@ html {
 	font-weight: bold;
 }
 
-/* コピーライトから、lightningの部分のみを消す */
-.site-footer-copyright p:nth-child(2) {
-    display: none; 
-}
-
 /* ヘッダーの上半分 */
 .site-header {
 	font-size: 0;
